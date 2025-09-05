@@ -1,96 +1,83 @@
 #!/bin/bash
 
-next ()
-{
-  osascript -e 'tell application "Spotify" to play next track'
-}
-
-back () 
-{
-  osascript -e 'tell application "Spotify" to play previous track'
-}
-
-play_pause () 
-{
-  osascript -e 'tell application "Spotify" to playpause'
-}
-
-repeat () 
-{
-  REPEAT=$(osascript -e 'tell application "Spotify" to get repeating')
-  if [ "$REPEAT" = "false" ]; then
-    sketchybar -m --set spotify.repeat icon.highlight=on
-    osascript -e 'tell application "Spotify" to set repeating to true'
-  else 
-    sketchybar -m --set spotify.repeat icon.highlight=off
-    osascript -e 'tell application "Spotify" to set repeating to false'
-  fi
-}
-
-shuffle () 
-{
-  SHUFFLE=$(osascript -e 'tell application "Spotify" to get shuffling')
-  if [ "$SHUFFLE" = "false" ]; then
-    sketchybar -m --set spotify.shuffle icon.highlight=on
-    osascript -e 'tell application "Spotify" to set shuffling to true'
-  else 
-    sketchybar -m --set spotify.shuffle icon.highlight=off
-    osascript -e 'tell application "Spotify" to set shuffling to false'
-  fi
-}
-
 update ()
 {
-  PLAYING=1
-  if [ "$(echo "$INFO" | jq -r '.["Player State"]')" = "Playing" ]; then
-    PLAYING=0
-    TRACK="$(echo "$INFO" | jq -r .Name | cut -c1-20)"
-    ARTIST="$(echo "$INFO" | jq -r .Artist | cut -c1-20)"
-    ALBUM="$(echo "$INFO" | jq -r .Album | cut -c1-20)"
-    SHUFFLE=$(osascript -e 'tell application "Spotify" to get shuffling')
-    REPEAT=$(osascript -e 'tell application "Spotify" to get repeating')
-  fi
-
-  args=()
-  if [ $PLAYING -eq 0 ]; then
-    if [ "$ARTIST" == "" ]; then
-      args+=(--set spotify.name label="$TRACK  􀉮  $ALBUM" drawing=on)
-    else
-      args+=(--set spotify.name label="$TRACK  􀉮  $ARTIST" drawing=on)
+    # 1) If Spotify isn’t even running, hide the bar and return
+    if ! pgrep -x Spotify &> /dev/null; then
+        sketchybar -m --set spotify drawing=off
+        return
     fi
-    args+=(--set spotify.play_pause icon=􀊆 \
-           --set spotify.shuffle icon.highlight=$SHUFFLE \
-           --set spotify.repeat icon.highlight=$REPEAT)
-  else
-    args+=(--set spotify.name drawing=off \
-           --set spotify.name popup.drawing=off \
-           --set spotify.play_pause icon=􀊄)
-  fi
-  sketchybar -m "${args[@]}"
+
+    local state
+    state=$(jq -r '.["Player State"]' <<< "$INFO")
+
+    PLAYING=0
+    if [ "$(echo "$INFO" | jq -r '.["Player State"]')" = "Playing" ]; then
+        PLAYING=1
+        TRACK=$(
+        raw="$(jq -r .Name   <<<"$INFO")"
+        if (( ${#raw} > 30 )); then
+            if [[ "$raw" == *" "* ]]; then
+            # >30 chars _and_ has at least one space → first 3 words
+            cut -d' ' -f1-3 <<<"$raw"
+            else
+            # >30 chars _but_ no spaces → first 30 characters
+            printf '%s' "${raw:0:10}"
+            fi
+        else
+            # ≤30 chars → the whole thing
+            printf '%s' "$raw"
+        fi
+        )
+
+        ARTIST=$(
+        raw="$(jq -r .Artist <<<"$INFO")"
+        if (( ${#raw} > 30 )); then
+            if [[ "$raw" == *" "* ]]; then
+            cut -d' ' -f1-3 <<<"$raw"
+            else
+            printf '%s' "${raw:0:10}"
+            fi
+        else
+            printf '%s' "$raw"
+        fi
+        )
+
+        ALBUM=$(
+        raw="$(jq -r .Album  <<<"$INFO")"
+        if (( ${#raw} > 30 )); then
+            if [[ "$raw" == *" "* ]]; then
+            cut -d' ' -f1-3 <<<"$raw"
+            else
+            printf '%s' "${raw:0:10}"
+            fi
+        else
+            printf '%s' "$raw"
+        fi
+        )
+    fi
+
+    args=()
+    if [ $PLAYING -eq 1 ]; then
+        if [ "$ARTIST" == "" ]; then
+            args+=(--set spotify label="${TRACK} --- ${ARTIST}" drawing=off)
+        else
+            args+=(--set spotify label="${TRACK} --- ${ARTIST}" drawing=on)
+        fi
+    fi
+    sketchybar -m "${args[@]}"
 }
 
-mouse_clicked () {
-  case "$NAME" in
-    "spotify.next") next
-    ;;
-    "spotify.back") back
-    ;;
-    "spotify.play_pause") play_pause
-    ;;
-    "spotify.shuffle") shuffle
-    ;;
-    "spotify.repeat") repeat
-    ;;
-    *)
-    ;;
-  esac
+play_pause ()
+{
+    osascript -e 'tell application "Spotify" to playpause'
 }
 
 case "$SENDER" in
-  "mouse.clicked") mouse_clicked
-  ;;
-  "forced") exit
-  ;;
-  *) update
-  ;;
+    "mouse.clicked") play_pause
+    ;;
+    "forced") exit
+    ;;
+    *) update
+    ;;
 esac
