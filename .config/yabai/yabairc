@@ -57,5 +57,11 @@ yabai -m config window_gap                      16
 
 # yabai -m signal --add event=system_woke action="brew services restart sketchybar"
 
+# scratch space configuration
+# Create scratch space (space 11) if it doesn't exist
+yabai -m space 11 --create 2>/dev/null || true
+# Set scratch space to float layout for better temporary window management
+yabai -m space 11 --layout float
+
 # start janky boarders
 borders active_color=0xff625A60 inactive_color=0xff2d2a2e width=4.0 &
