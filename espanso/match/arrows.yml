@@ -1,3 +1,13 @@
 matches:
-    - trigger: "nrightarrow"
-      replace: ↛
+  - trigger: "nrightarrow"
+    replace: ↛
+  - trigger: ":rightarrow"
+    replace: →
+  - trigger: ":leftarrow"
+    replace: ←
+  - trigger: ":uparrow"
+    replace: ↑
+  - trigger: ":downarrow"
+    replace: ↓
+  - trigger: ":implies"
+    replace: ⟹

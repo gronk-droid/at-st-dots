@@ -7,5 +7,5 @@ search_shortcut: off
 search_trigger: off
 show_icon: false
 fast_inject: false
-backspace_delay: 5
-inject_delay: 5
+backspace_delay: 7
+inject_delay: 7
