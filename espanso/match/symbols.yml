@@ -28,3 +28,7 @@ matches:
     replace: 
   - trigger: ":section"
     replace: §
+  - trigger: ":geq"
+    replace: ≥
+  - trigger: ":leq"
+    replace: ≤

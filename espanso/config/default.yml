@@ -6,6 +6,3 @@ show_notifications: false
 search_shortcut: off
 search_trigger: off
 show_icon: false
-fast_inject: false
-backspace_delay: 7
-inject_delay: 7
