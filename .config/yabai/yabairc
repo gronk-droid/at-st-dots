@@ -47,7 +47,7 @@ yabai -m config mouse_drop_action               stack
 # general space settings
 yabai -m config layout                          bsp
 yabai -m config external_bar                    all:16:0
-yabai -m config top_padding                     16
+yabai -m config top_padding                     32
 yabai -m config bottom_padding                  16
 yabai -m config left_padding                    18
 yabai -m config right_padding                   18
@@ -62,6 +62,14 @@ yabai -m config window_gap                      16
 yabai -m space 11 --create 2>/dev/null || true
 # Set scratch space to float layout for better temporary window management
 yabai -m space 11 --layout float
+
+# Display management - automatically move spaces 6-10 to second display when connected
+yabai -m signal --add event=display_added action="$HOME/.config/sketchybar/plugins/display_manager.sh"
+yabai -m signal --add event=display_removed action="$HOME/.config/sketchybar/plugins/display_manager.sh"
+yabai -m signal --add event=display_changed action="$HOME/.config/sketchybar/plugins/display_manager.sh"
+
+# Run display manager on startup to set initial state
+$HOME/.config/sketchybar/plugins/display_manager.sh
 
 # start janky boarders
 borders active_color=0xff625A60 inactive_color=0xff2d2a2e width=4.0 &
