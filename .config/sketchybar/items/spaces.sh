@@ -37,44 +37,55 @@ sketchybar  --add       space               space_template left                 
             --set       spaces.five         associated_space=5                  \
                                             icon=五                             \
                                             drawing=on                          \
+                                            background.padding_right=10         \
                                                                                 \
             --clone     spaces.six          space_template                      \
             --set       spaces.six          associated_space=6                  \
+                                            associated_display=2                \
                                             icon=六                             \
                                             drawing=on                          \
+                                            background.padding_left=10                          \
                                                                                 \
             --clone     spaces.seven        space_template                      \
             --set       spaces.seven        associated_space=7                  \
+                                            associated_display=2                \
                                             icon=七                             \
                                             drawing=on                          \
                                                                                 \
             --clone     spaces.eight        space_template                      \
             --set       spaces.eight        associated_space=8                  \
+                                            associated_display=2                \
                                             icon=八                             \
                                             drawing=on                          \
                                                                                 \
             --clone     spaces.nine         space_template                      \
             --set       spaces.nine         associated_space=9                  \
+                                            associated_display=2                \
                                             icon=九                             \
                                             drawing=on                          \
                                                                                 \
             --clone     spaces.ten          space_template                      \
             --set       spaces.ten          associated_space=10                 \
+                                            associated_display=2                \
                                             icon=〇                             \
                                             drawing=on                          \
                                             background.padding_right=10         \
-            --add       bracket             spaces                              \
+            --add       bracket             spaces_primary                      \
                                             spaces.one                          \
                                             spaces.two                          \
                                             spaces.three                        \
                                             spaces.four                         \
                                             spaces.five                         \
+            --set       spaces_primary      background.drawing=on               \
+                                            padding_left=20                     \
+                                            padding_right=20                    \
+            --add       bracket             spaces_secondary                    \
                                             spaces.six                          \
                                             spaces.seven                        \
                                             spaces.eight                        \
                                             spaces.nine                         \
                                             spaces.ten                          \
-            --set       spaces              background.drawing=on               \
+            --set       spaces_secondary    background.drawing=on               \
                                             padding_left=20                     \
                                             padding_right=20                    \
 

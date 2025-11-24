@@ -11,6 +11,7 @@ sketchybar  --clone     date                label_template                      
                                             padding_right=20                    \
                                             label.padding_left=10               \
                                             label.padding_right=10              \
+                                            click_script="open \"obsidian://open?vault=GRxx&file=daily/$(date +%Y-%m-%d).md\"" \
 
 sketchybar  --add       item                time right                          \
             --set       time                update_freq=2                       \
