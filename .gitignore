@@ -18,3 +18,14 @@
 !.config/yabai/**
 !espanso/**
 !.config/raycast/scripts/**
+!.config/nvim/**
+
+# nvim
+tt.*
+.tests
+doc/tags
+debug
+.repro
+foo.*
+*.log
+data
