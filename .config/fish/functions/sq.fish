@@ -6,5 +6,5 @@ function sq --description "Uses spotqo-dl to download songs to music directory"
 
     # activate venv
     source ~/gh/spotqo-dl/.venv/bin/activate.fish
-    ~/gh/spotqo-dl/.venv/bin/spotqo-dl -q 6 -f "{artist}/{album}/{track-number}-{title}" -o ~/01_music/ $argv
+    ~/gh/spotqo-dl/.venv/bin/spotqo-dl download -q 6 -f "{artist}/{album}/{track-number}-{title}" -o ~/01_music/ $argv
 end
