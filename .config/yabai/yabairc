@@ -71,5 +71,12 @@ yabai -m signal --add event=display_changed action="$HOME/.config/sketchybar/plu
 # Run display manager on startup to set initial state
 $HOME/.config/sketchybar/plugins/display_manager.sh
 
+# Window rules
+yabai -m rule --add app="^mpv$" manage=off
+yabai -m rule --add app="^Preview$" manage=off grid=4:4:1:1:2:2
+
 # start janky boarders
 borders active_color=0xff625A60 inactive_color=0xff2d2a2e width=4.0 &
+
+yabai -m signal --add app='^Ghostty$' event=window_created action='yabai -m space --layout bsp'
+yabai -m signal --add app='^Ghostty$' event=window_destroyed action='yabai -m space --layout bsp'
