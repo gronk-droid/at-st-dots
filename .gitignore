@@ -19,6 +19,7 @@
 !espanso/**
 !.config/raycast/scripts/**
 !.config/nvim/**
+!.config/yazi/**
 
 # nvim
 tt.*
